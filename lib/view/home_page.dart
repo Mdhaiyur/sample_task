@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sample_task/controller/user_controller.dart';
 import 'package:sample_task/view/user_register_page.dart';
-
-import '../user_controller.dart';
 
 class HomePage extends StatelessWidget {
 

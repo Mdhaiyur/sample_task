@@ -1,9 +1,11 @@
+import 'dart:typed_data';
+
 class UserModel {
   String firstName;
   String lastName;
   String email;
   String mobileNumber;
-  String profilePhoto;
+  Uint8List profilePhoto;
   String gender;
   String education;
   int yearOfPassing;

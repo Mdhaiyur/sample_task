@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../user_controller.dart';
+import 'package:sample_task/controller/user_controller.dart';
+import 'package:sample_task/view/user_info_page.dart';
 
 class UserRegisterPage extends StatelessWidget {
   UserController userController = Get.find();
@@ -29,33 +29,32 @@ class UserRegisterPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(
-                  fit: StackFit.passthrough,
-                  children: <Widget>[
-                Container(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 10.0,
-                      spreadRadius: 3.0,
-                      offset: Offset(10.0, 10.0),
+                Center(
+                  child: SizedBox(
+                    height: 115,
+                    width: 115,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      fit: StackFit.expand,
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage("https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"),
+                        ),
+                        Positioned(
+                            bottom: 25,
+                            right: -50,
+                            child: RawMaterialButton(
+                              onPressed: () {},
+                              elevation: 2.0,
+                              fillColor: Colors.white,
+                              child: const Icon(Icons.edit, color: Colors.deepPurpleAccent,),
+                              padding: EdgeInsets.all(10.0),
+                              shape: CircleBorder(),
+                            )),
+                      ],
                     ),
-                  ],
-                ),
-                alignment: Alignment.centerRight,
-                width: 200,
-                height: 200,
-                child: RotatedBox(
-                  quarterTurns: 1,
-                  child: Text(
-                    'Container 1',
-                    style:
-                    TextStyle(fontSize: 18.0, color: Colors.white),
                   ),
                 ),
-                ),]),
                 Text(
                   'First Name*',
                   style: GoogleFonts.poppins(
@@ -280,7 +279,7 @@ class UserRegisterPage extends StatelessWidget {
                       ),
                       primary: Colors.deepPurpleAccent),
                   onPressed: () {
-                    // Get.to(UserRegisterPage());
+                     Get.to(UserInfoPage());
                   },
                 ),
               ],
