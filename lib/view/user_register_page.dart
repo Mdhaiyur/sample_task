@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sample_task/controller/user_controller.dart';
-import 'package:sample_task/view/user_info_page.dart';
+import 'package:sample_task/utils/utils.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserRegisterPage extends GetWidget<UserController> {
-
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +45,34 @@ class UserRegisterPage extends GetWidget<UserController> {
                       clipBehavior: Clip.none,
                       fit: StackFit.expand,
                       children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage("https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"),
+                        GetBuilder<UserController>(
+                          init: controller,
+                          builder: (value) => CircleAvatar(
+                              radius: 50,
+                              child: controller.profilePhoto != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(60.0),
+                                      child: Image.memory(
+                                        controller.profilePhoto!,
+                                        width: 115,
+                                        height: 115,
+                                        fit: BoxFit.fill,
+                                      ))
+                                  : Container()),
                         ),
                         Positioned(
                             bottom: 25,
                             right: -50,
                             child: RawMaterialButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                _showAlertDialog(context);
+                              },
                               elevation: 2.0,
                               fillColor: Colors.white,
-                              child: const Icon(Icons.edit, color: Colors.deepPurpleAccent,),
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.deepPurpleAccent,
+                              ),
                               padding: EdgeInsets.all(10.0),
                               shape: CircleBorder(),
                             )),
@@ -69,23 +88,28 @@ class UserRegisterPage extends GetWidget<UserController> {
                   ),
                 ),
                 TextFormField(
+                  controller: firstName,
                   cursorColor: Colors.black,
+                  textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.name,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                  ],
                   decoration: InputDecoration(
-                      prefixIcon:const Icon(
+                      prefixIcon: const Icon(
                         Icons.person,
                         color: Colors.deepPurpleAccent,
                       ),
-                      enabledBorder:const OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      focusedBorder:const OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      border:const OutlineInputBorder(),
-                      contentPadding:const EdgeInsets.only(
+                      border: const OutlineInputBorder(),
+                      contentPadding: const EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "Enter your first name here",
                       hintStyle: GoogleFonts.poppins(
@@ -102,21 +126,26 @@ class UserRegisterPage extends GetWidget<UserController> {
                   ),
                 ),
                 TextFormField(
+                  controller: lastName,
+                  textInputAction: TextInputAction.next,
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.name,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                  ],
                   decoration: InputDecoration(
-                      prefixIcon:
-                      const  Icon(Icons.person, color: Colors.deepPurpleAccent),
-                      enabledBorder:const OutlineInputBorder(
+                      prefixIcon: const Icon(Icons.person,
+                          color: Colors.deepPurpleAccent),
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      focusedBorder:const OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      border:const OutlineInputBorder(),
-                      contentPadding:const EdgeInsets.only(
+                      border: const OutlineInputBorder(),
+                      contentPadding: const EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "Enter your last name here",
                       hintStyle: GoogleFonts.poppins(
@@ -133,12 +162,17 @@ class UserRegisterPage extends GetWidget<UserController> {
                   ),
                 ),
                 TextFormField(
+                  controller: phoneNumber,
+                  textInputAction: TextInputAction.next,
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.phone,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                  ],
                   decoration: InputDecoration(
-                      prefixIcon:
-                      const Icon(Icons.phone, color: Colors.deepPurpleAccent),
-                      enabledBorder:const OutlineInputBorder(
+                      prefixIcon: const Icon(Icons.phone,
+                          color: Colors.deepPurpleAccent),
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
@@ -146,8 +180,8 @@ class UserRegisterPage extends GetWidget<UserController> {
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      border:const OutlineInputBorder(),
-                      contentPadding:const EdgeInsets.only(
+                      border: const OutlineInputBorder(),
+                      contentPadding: const EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "Enter your 10 digit phone number",
                       hintStyle: GoogleFonts.poppins(
@@ -164,6 +198,8 @@ class UserRegisterPage extends GetWidget<UserController> {
                   ),
                 ),
                 TextFormField(
+                  controller: email,
+                  textInputAction: TextInputAction.done,
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
@@ -172,15 +208,15 @@ class UserRegisterPage extends GetWidget<UserController> {
                         color: Colors.deepPurpleAccent,
                       ),
                       enabledBorder: const OutlineInputBorder(
-                        borderSide:BorderSide(
+                        borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      focusedBorder:const OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
                       border: const OutlineInputBorder(),
-                      contentPadding:const EdgeInsets.only(
+                      contentPadding: const EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "Your email goes here",
                       hintStyle: GoogleFonts.poppins(
@@ -212,28 +248,48 @@ class UserRegisterPage extends GetWidget<UserController> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                TextFormField(
-                  cursorColor: Colors.black,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                      prefixIcon:const Icon(
-                        Icons.email,
-                        color: Colors.deepPurpleAccent,
-                      ),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide:BorderSide(
-                            color: Colors.deepPurpleAccent, width: 1.0),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.deepPurpleAccent, width: 1.0),
-                      ),
-                      border:const OutlineInputBorder(),
-                      contentPadding: const EdgeInsets.only(
-                          left: 15, bottom: 11, top: 11, right: 15),
-                      hintText: "Password",
-                      hintStyle: GoogleFonts.poppins(
-                          fontSize: 14, color: Colors.grey)),
+                GetBuilder<UserController>(
+                  init: controller,
+                  builder: (value) => TextFormField(
+                    controller: password,
+                    textInputAction: TextInputAction.next,
+                    cursorColor: Colors.black,
+                    obscureText: !controller.passwordVisible,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.email,
+                          color: Colors.deepPurpleAccent,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          onPressed: () {
+                            controller.updatePasswordVisibility(
+                                !controller.passwordVisible);
+                          },
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.deepPurpleAccent, width: 1.0),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.deepPurpleAccent, width: 1.0),
+                        ),
+                        border: const OutlineInputBorder(),
+                        contentPadding: const EdgeInsets.only(
+                            left: 15, bottom: 11, top: 11, right: 15),
+                        hintText: "Password",
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 14, color: Colors.grey)),
+                  ),
                 ),
                 const SizedBox(
                   height: 15,
@@ -246,8 +302,13 @@ class UserRegisterPage extends GetWidget<UserController> {
                   ),
                 ),
                 TextFormField(
+                  controller: confirmPassword,
+                  textInputAction: TextInputAction.done,
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.emailAddress,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
                   decoration: InputDecoration(
                       prefixIcon: const Icon(
                         Icons.email,
@@ -285,7 +346,7 @@ class UserRegisterPage extends GetWidget<UserController> {
                       ),
                       primary: Colors.deepPurpleAccent),
                   onPressed: () {
-                     Get.to(UserInfoPage());
+                    _verifyUserRegister();
                   },
                 ),
               ],
@@ -313,6 +374,103 @@ class UserRegisterPage extends GetWidget<UserController> {
         ),
         Text(title)
       ],
+    );
+  }
+
+  _verifyUserRegister() {
+    if (firstName.text.trim().isEmpty) {
+      Utils().showSnackbar("First Name must be entered.");
+    } else if (firstName.text.trim().length < 4) {
+      Utils().showSnackbar("First Name must Contain Atleast 4 Characters.");
+    } else if (lastName.text.trim().isEmpty) {
+      Utils().showSnackbar("Last Name must be entered.");
+    } else if (lastName.text.trim().length < 4) {
+      Utils().showSnackbar("Last Name must Contain Atleast 4 Characters.");
+    } else if (phoneNumber.text.trim().isEmpty) {
+      Utils().showSnackbar("Phone Number must be entered.");
+    } else if (phoneNumber.text.trim().length != 10) {
+      Utils().showSnackbar("Phone Number must be valid number.");
+    } else if (email.text.trim().isEmpty) {
+      Utils().showSnackbar("Email must be entered.");
+    } else if (!Utils().isEmailValid(email.text.trim())) {
+      Utils().showSnackbar("Email must be valid.");
+    } else if (controller.selectGender == '') {
+      Utils().showSnackbar("Gender must be selected.");
+    } else if (password.text.trim().isEmpty) {
+      Utils().showSnackbar("Password must be entered.");
+    } else if (!Utils().validatePassword(password.text.trim())) {
+      Utils().showSnackbar("Password must be valid.");
+    } else if (confirmPassword.text.trim().isEmpty) {
+      Utils().showSnackbar("Confirm Password must be entered.");
+    } else if (password.text.trim() != confirmPassword.text.trim()) {
+      Utils().showSnackbar("Password and Confirm Password must be same.");
+    } else {
+      controller.saveUserRegisterDetails(
+          firstName.text.toString(),
+          lastName.text.toString(),
+          phoneNumber.text.toString(),
+          email.text.toString(),
+          password.text.toString());
+    }
+  }
+
+  _showAlertDialog(BuildContext context) {
+    Widget okButton = TextButton(
+      child: Text(
+        "Cancel",
+        style: GoogleFonts.poppins(fontSize: 14),
+      ),
+      onPressed: () {
+        Get.back();
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text(
+        "Select option",
+        style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.bold),
+      ),
+      content: Wrap(
+        direction: Axis.vertical,
+        children: [
+          InkWell(
+            onTap: () async {
+              final pickedFile =
+                  await _picker.pickImage(source: ImageSource.camera);
+              pickedFile!.readAsBytes().then((value) {
+                controller.updateUserProfile(value);
+              });
+              Get.back();
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text("Camera"),
+            ),
+          ),
+          InkWell(
+            onTap: () async {
+              final pickedFile =
+                  await _picker.pickImage(source: ImageSource.gallery);
+              pickedFile!.readAsBytes().then((value) {
+                controller.updateUserProfile(value);
+              });
+              Get.back();
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text("Gallery"),
+            ),
+          )
+        ],
+      ),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

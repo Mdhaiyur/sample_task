@@ -3,11 +3,13 @@ import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sample_task/controller/user_controller.dart';
+import 'package:sample_task/model/user_model.dart';
 import 'package:sample_task/view/user_register_page.dart';
 
-class HomePage extends StatelessWidget {
+import 'user_details_page.dart';
 
-  UserController userController =Get.put(UserController());
+class HomePage extends StatelessWidget {
+  final UserController userController = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +28,18 @@ class HomePage extends StatelessWidget {
           child: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return userCell();
-              },
-            ),
+            child: GetX<UserController>(
+                init: userController,
+                builder: (controller) {
+                  return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: controller.mlistUser.length,
+                    itemBuilder: (context, index) {
+                      return userCell(controller.mlistUser[index]);
+                    },
+                  );
+                }),
           ),
           ElevatedButton(
             child: Text(
@@ -49,6 +55,8 @@ class HomePage extends StatelessWidget {
                 ),
                 primary: Colors.deepPurpleAccent),
             onPressed: () {
+              userController.currentUser=UserModel();
+              userController.profilePhoto=null;
               Get.to(UserRegisterPage());
             },
           ),
@@ -57,39 +65,50 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  userCell() {
+  userCell(UserModel user) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 30.0,
-            backgroundImage: NetworkImage(
-                'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Dhaiyur",
-                  style: GoogleFonts.poppins(fontSize: 14),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  "Dhaiyur,Makavana",
-                  style: GoogleFonts.poppins(fontSize: 14),
-                ),
-              ],
+      child: GestureDetector(
+        onTap: (){
+          showDialog(
+            context: Get.context!,
+            builder: (_) => UserDetailsPage(user),
+          );
+
+        },
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 30.0,
+              child: user.profilePhoto==null
+                  ? Image.asset('assets/images/user_placeholder.png')
+                  : ClipRRect( borderRadius: BorderRadius.circular(60.0),child: Image.memory(user.profilePhoto!)),
             ),
-          ),
-          const SizedBox(width: 10),
-          const Icon(
-            Icons.arrow_forward_ios_outlined,
-            color: Colors.grey,
-          )
-        ],
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user.firstName! + " " + user.lastName!,
+                    style: GoogleFonts.poppins(
+                        fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    user.city! + "," + user.state!,
+                    style: GoogleFonts.poppins(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            const Icon(
+              Icons.arrow_forward_ios_outlined,
+              color: Colors.grey,
+            )
+          ],
+        ),
       ),
     );
   }

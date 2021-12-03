@@ -1,15 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sample_task/controller/user_controller.dart';
+import 'package:sample_task/utils/utils.dart';
 
-import 'user_address_page.dart';
 
-enum Education { PostGraduate, Graduate, HSCDiploma, SSC }
 
-class UserInfoPage extends StatelessWidget {
+class UserInfoPage extends GetWidget<UserController> {
+  TextEditingController yearOfPassing = TextEditingController();
+  TextEditingController university = TextEditingController();
+  TextEditingController grade = TextEditingController();
+  TextEditingController experience = TextEditingController();
+  TextEditingController designation = TextEditingController();
+  TextEditingController domain = TextEditingController();
+
+  List<String> educationList=[ 'PostGraduate', 'Graduate', 'HSC', 'Diploma', 'SSC'];
+
   @override
   Widget build(BuildContext context) {
+    String educationSelection=educationList[0];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -47,30 +59,29 @@ class UserInfoPage extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                DropdownButtonFormField<Education>(
-                    decoration: InputDecoration(
-
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.deepPurpleAccent, width: 1.0),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.deepPurpleAccent, width: 1.0),
-                        ),
-                        border: const OutlineInputBorder(),
-                        contentPadding: const EdgeInsets.only(
-                            left: 15, bottom: 11, top: 11, right: 15),
-                        hintText: "Enter your last name here",
-                        hintStyle: GoogleFonts.poppins(
-                            fontSize: 14, color: Colors.grey)),
-                    value: Education.values.toList().first,
+                DropdownButtonFormField<String>(
+                    decoration:const InputDecoration(
+                      enabledBorder:  OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.deepPurpleAccent, width: 1.0),
+                      ),
+                      focusedBorder:  OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.deepPurpleAccent, width: 1.0),
+                      ),
+                      border: OutlineInputBorder(),
+                      contentPadding:  EdgeInsets.only(
+                          left: 15, bottom: 11, top: 11, right: 15),
+                    ),
+                    value: educationSelection,
                     onChanged: (newValue) {
                       print(newValue);
+                      educationSelection!=newValue;
                     },
-                    items: Education.values.map((Education classType) {
-                      return DropdownMenuItem<Education>(
-                          value: classType, child: Text(classType.toString()));
+                    items: educationList.map((classType) {
+                      return DropdownMenuItem(
+                          value: classType.toString(),
+                          child: Text(classType.toString()));
                     }).toList()),
                 const SizedBox(
                   height: 15,
@@ -84,7 +95,12 @@ class UserInfoPage extends StatelessWidget {
                 ),
                 TextFormField(
                   cursorColor: Colors.black,
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.number,
+                  controller: yearOfPassing,
+                  textInputAction: TextInputAction.next,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                  ],
                   decoration: InputDecoration(
                       enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
@@ -105,7 +121,7 @@ class UserInfoPage extends StatelessWidget {
                   height: 15,
                 ),
                 Text(
-                  'Grade*',
+                  'University',
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -113,7 +129,46 @@ class UserInfoPage extends StatelessWidget {
                 ),
                 TextFormField(
                   cursorColor: Colors.black,
+                  keyboardType: TextInputType.text,
+                  controller: university,
+                  textInputAction: TextInputAction.next,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z ]")),
+                  ],
+                  decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.deepPurpleAccent, width: 1.0),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.deepPurpleAccent, width: 1.0),
+                      ),
+                      border: const OutlineInputBorder(),
+                      contentPadding: const EdgeInsets.only(
+                          left: 15, bottom: 11, top: 11, right: 15),
+                      hintText: "Enter your university",
+                      hintStyle: GoogleFonts.poppins(
+                          fontSize: 14, color: Colors.grey)),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Grade*',
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                TextFormField(
+                  controller: grade,
+                  cursorColor: Colors.black,
                   keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9 ]")),
+                  ],
                   decoration: InputDecoration(
                       enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
@@ -151,8 +206,13 @@ class UserInfoPage extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
+                  controller: experience,
                   cursorColor: Colors.black,
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                  ],
                   decoration: InputDecoration(
                       enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
@@ -182,6 +242,11 @@ class UserInfoPage extends StatelessWidget {
                 TextFormField(
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  controller: designation,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9 ]")),
+                  ],
                   decoration: InputDecoration(
                       enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
@@ -210,7 +275,12 @@ class UserInfoPage extends StatelessWidget {
                 ),
                 TextFormField(
                   cursorColor: Colors.black,
+                  controller: domain,
+                  textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.name,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9 ]")),
+                  ],
                   decoration: InputDecoration(
                       enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
@@ -237,10 +307,13 @@ class UserInfoPage extends StatelessWidget {
                         child: Text(
                           'Previous',
                           style: GoogleFonts.poppins(
-                              fontSize: 18, fontWeight: FontWeight.w600,color: Colors.deepPurpleAccent),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.deepPurpleAccent),
                         ),
                         style: ElevatedButton.styleFrom(
-                            side: const BorderSide(width: 1.5,color: Colors.deepPurpleAccent),
+                            side: const BorderSide(
+                                width: 1.5, color: Colors.deepPurpleAccent),
                             elevation: 0,
                             minimumSize: const Size.fromHeight(50),
                             shape: RoundedRectangleBorder(
@@ -248,11 +321,13 @@ class UserInfoPage extends StatelessWidget {
                             ),
                             primary: Colors.white),
                         onPressed: () {
-                          //  Get.to(UserInfoPage());
+                          Get.back();
                         },
                       ),
                     ),
-                   const SizedBox(width: 10,),
+                    const SizedBox(
+                      width: 10,
+                    ),
                     Expanded(
                       child: ElevatedButton(
                         child: Text(
@@ -268,7 +343,8 @@ class UserInfoPage extends StatelessWidget {
                             ),
                             primary: Colors.deepPurpleAccent),
                         onPressed: () {
-                            Get.to(UserAddressPage());
+                          _verifyUserInfo(educationSelection);
+                          //  Get.to(UserAddressPage());
                         },
                       ),
                     ),
@@ -280,5 +356,32 @@ class UserInfoPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _verifyUserInfo(String education) {
+    print(controller.currentUser.firstName);
+
+    if (yearOfPassing.text.trim().isEmpty) {
+      Utils().showSnackbar("Year of Passing must be entered");
+    } else if (university.text.trim().isEmpty) {
+      Utils().showSnackbar("University must be entered");
+    } else if (grade.text.trim().isEmpty) {
+      Utils().showSnackbar("Grade must be entered");
+    } else if (experience.text.trim().isEmpty) {
+      Utils().showSnackbar("Experience must be entered");
+    } else if (designation.text.trim().isEmpty) {
+      Utils().showSnackbar("Designation must be entered");
+    } else if (domain.text.trim().isEmpty) {
+      Utils().showSnackbar("Designation must be entered");
+    } else {
+      controller.saveUserEducationInfo(
+          education,
+          yearOfPassing.text.trim().toString(),
+          university.text.trim().toString(),
+          grade.text.trim().toString(),
+          experience.text.trim().toString(),
+          designation.text.trim().toString(),
+          domain.text.trim().toString());
+    }
   }
 }
