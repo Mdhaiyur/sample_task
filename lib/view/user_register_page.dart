@@ -4,8 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sample_task/controller/user_controller.dart';
 import 'package:sample_task/view/user_info_page.dart';
 
-class UserRegisterPage extends StatelessWidget {
-  UserController userController = Get.find();
+class UserRegisterPage extends GetWidget<UserController> {
+
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,26 +72,26 @@ class UserRegisterPage extends StatelessWidget {
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(
+                      prefixIcon:const Icon(
                         Icons.person,
                         color: Colors.deepPurpleAccent,
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder:const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder:const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.only(
+                      border:const OutlineInputBorder(),
+                      contentPadding:const EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "Enter your first name here",
                       hintStyle: GoogleFonts.poppins(
                           fontSize: 14, color: Colors.grey)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Text(
@@ -100,17 +106,17 @@ class UserRegisterPage extends StatelessWidget {
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                       prefixIcon:
-                          Icon(Icons.person, color: Colors.deepPurpleAccent),
-                      enabledBorder: OutlineInputBorder(
+                      const  Icon(Icons.person, color: Colors.deepPurpleAccent),
+                      enabledBorder:const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder:const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.only(
+                      border:const OutlineInputBorder(),
+                      contentPadding:const EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "Enter your last name here",
                       hintStyle: GoogleFonts.poppins(
@@ -131,17 +137,17 @@ class UserRegisterPage extends StatelessWidget {
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                       prefixIcon:
-                          Icon(Icons.phone, color: Colors.deepPurpleAccent),
-                      enabledBorder: OutlineInputBorder(
+                      const Icon(Icons.phone, color: Colors.deepPurpleAccent),
+                      enabledBorder:const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.only(
+                      border:const OutlineInputBorder(),
+                      contentPadding:const EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "Enter your 10 digit phone number",
                       hintStyle: GoogleFonts.poppins(
@@ -161,20 +167,20 @@ class UserRegisterPage extends StatelessWidget {
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.email,
                         color: Colors.deepPurpleAccent,
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide:BorderSide(
+                            color: Colors.deepPurpleAccent, width: 1.0),
+                      ),
+                      focusedBorder:const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.deepPurpleAccent, width: 1.0),
-                      ),
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.only(
+                      border: const OutlineInputBorder(),
+                      contentPadding:const EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "Your email goes here",
                       hintStyle: GoogleFonts.poppins(
@@ -210,20 +216,20 @@ class UserRegisterPage extends StatelessWidget {
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(
+                      prefixIcon:const Icon(
                         Icons.email,
                         color: Colors.deepPurpleAccent,
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide:BorderSide(
+                            color: Colors.deepPurpleAccent, width: 1.0),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.deepPurpleAccent, width: 1.0),
-                      ),
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.only(
+                      border:const OutlineInputBorder(),
+                      contentPadding: const EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "Password",
                       hintStyle: GoogleFonts.poppins(
@@ -243,20 +249,20 @@ class UserRegisterPage extends StatelessWidget {
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.email,
                         color: Colors.deepPurpleAccent,
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.only(
+                      border: const OutlineInputBorder(),
+                      contentPadding: const EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "Password",
                       hintStyle: GoogleFonts.poppins(
@@ -295,13 +301,13 @@ class UserRegisterPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         GetBuilder<UserController>(
-          init: UserController(),
+          init: controller,
           builder: (value) => Radio(
             activeColor: Colors.deepPurpleAccent,
-            value: userController.gender[btnValue].toString(),
-            groupValue: userController.selectGender,
+            value: controller.gender[btnValue].toString(),
+            groupValue: controller.selectGender,
             onChanged: (value) {
-              userController.updateGender(value.toString());
+              controller.updateGender(value.toString());
             },
           ),
         ),
