@@ -1,5 +1,5 @@
 
-import 'package:sample_task/database/dao.dart';
+import 'package:sample_task/data/dao.dart';
 import 'package:sample_task/model/user_model.dart';
 
 class UserDao implements Dao<UserModel> {

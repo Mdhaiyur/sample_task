@@ -1,7 +1,6 @@
 
+import 'package:sample_task/data/local/database_provider.dart';
 import 'package:sample_task/model/user_model.dart';
-
-import 'database_provider.dart';
 
 abstract class UsersRepository {
   DatabaseProvider? databaseProvider;

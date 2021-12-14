@@ -1,16 +1,16 @@
-import 'package:sample_task/database/user_repository.dart';
+import 'package:sample_task/data/local/database_provider.dart';
 import 'package:sample_task/model/user_dao.dart';
 import 'package:sample_task/model/user_model.dart';
 
-import 'database_provider.dart';
+import 'user_repository.dart';
 
-class UsersDatabaseRepository implements UsersRepository {
+class UserRepositoryImp implements UsersRepository {
   final dao = UserDao();
 
   @override
   DatabaseProvider? databaseProvider;
 
-  UsersDatabaseRepository(this.databaseProvider);
+  UserRepositoryImp(this.databaseProvider);
 
   @override
   Future<void> insert(UserModel note) async {

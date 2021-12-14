@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sample_task/controller/user_controller.dart';
 import 'package:sample_task/model/user_model.dart';
-import 'package:sample_task/view/user_register_page.dart';
+import 'package:sample_task/view/personaldetails/user_personal_details.dart';
+import 'package:sample_task/view/widget/custom_button.dart';
+import 'package:sample_task/viewmodels/home/home_viewmodel.dart';
 
 import 'user_details_page.dart';
 
 class HomePage extends StatelessWidget {
-  final UserController userController = Get.put(UserController());
+  final HomeViewModel userController = Get.put(HomeViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class HomePage extends StatelessWidget {
           child: Column(
         children: [
           Expanded(
-            child: GetX<UserController>(
+            child: GetX<HomeViewModel>(
                 init: userController,
                 builder: (controller) {
                   return ListView.builder(
@@ -41,24 +42,12 @@ class HomePage extends StatelessWidget {
                   );
                 }),
           ),
-          ElevatedButton(
-            child: Text(
-              'Register',
-              style: GoogleFonts.poppins(
-                  fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-            style: ElevatedButton.styleFrom(
-                elevation: 0,
-                minimumSize: const Size.fromHeight(50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0),
-                ),
-                primary: Colors.deepPurpleAccent),
-            onPressed: () {
-              userController.currentUser=UserModel();
-              userController.profilePhoto=null;
-              Get.to(UserRegisterPage());
-            },
+          CustomButton(
+            text: 'Register',
+            borderColor: Colors.deepPurpleAccent,
+            textColor: Colors.white,
+            primaryColor: Colors.deepPurpleAccent,
+            onPress: () => Get.to(UserRegisterPage()),
           ),
         ],
       )),
@@ -69,20 +58,21 @@ class HomePage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           showDialog(
             context: Get.context!,
             builder: (_) => UserDetailsPage(user),
           );
-
         },
         child: Row(
           children: [
             CircleAvatar(
               radius: 30.0,
-              child: user.profilePhoto==null
+              child: user.profilePhoto == null
                   ? Image.asset('assets/images/user_placeholder.png')
-                  : ClipRRect( borderRadius: BorderRadius.circular(60.0),child: Image.memory(user.profilePhoto!)),
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(60.0),
+                      child: Image.memory(user.profilePhoto!)),
             ),
             const SizedBox(width: 10),
             Expanded(
