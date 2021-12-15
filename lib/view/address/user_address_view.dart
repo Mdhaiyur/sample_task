@@ -3,31 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sample_task/model/user_model.dart';
 import 'package:sample_task/utils/utils.dart';
 import 'package:sample_task/view/widget/custom_button.dart';
 import 'package:sample_task/view/widget/custom_textfield.dart';
 import 'package:sample_task/viewmodels/address/address_viewmodel.dart';
 
-class UserAddressPage extends GetView<AddressViewModel> {
-
-  UserModel? mUser;
-
-  UserAddressPage({this.mUser});
-
+class UserAddressPage extends StatelessWidget {
   TextEditingController address = TextEditingController();
   TextEditingController landmark = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController zipcode = TextEditingController();
 
-
+  final controller = Get.put(AddressViewModel());
 
   @override
   Widget build(BuildContext context) {
-
-    Get.put(AddressViewModel());
-    controller.updateCurrentUser(mUser!);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -102,7 +92,9 @@ class UserAddressPage extends GetView<AddressViewModel> {
                           left: 15, bottom: 11, top: 11, right: 15),
                     ),
                     value: controller.cityList[0],
-                    onChanged: (newValue) {},
+                    onChanged: (newValue) {
+                      controller.selectedState=newValue;
+                    },
                     items: controller.cityList.map((classType) {
                       return DropdownMenuItem(
                           value: classType.toString(),

@@ -3,21 +3,25 @@ import 'package:sample_task/model/user_model.dart';
 import 'package:sample_task/view/address/user_address_view.dart';
 
 class EducationViewModel extends GetxController {
-  var currentUser = UserModel();
+  var currentUser;
 
-  updateCurrentUser(UserModel mUser) {
-    currentUser = mUser;
-  }
+  String selectedEducation='';
+  List<String> educationList = [
+    'PostGraduate',
+    'Graduate',
+    'HSC',
+    'Diploma',
+    'SSC'
+  ];
 
   saveUserEducationInfo(
-      String education,
       String yearofPassing,
       String university,
       String grade,
       String experience,
       String designation,
       String domain) {
-    currentUser.education = education;
+    currentUser.education = selectedEducation;
     currentUser.yearOfPassing = yearofPassing;
     currentUser.university = university;
     currentUser.grade = grade;
@@ -25,6 +29,14 @@ class EducationViewModel extends GetxController {
     currentUser.designation = designation;
     currentUser.domain = domain;
 
-    Get.to(UserAddressPage(mUser: currentUser,));
+    Get.put<UserModel>(currentUser);
+    Get.to(UserAddressPage());
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    currentUser=Get.find<UserModel>();
   }
 }

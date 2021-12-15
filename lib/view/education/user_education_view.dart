@@ -9,15 +9,7 @@ import 'package:sample_task/view/widget/custom_button.dart';
 import 'package:sample_task/view/widget/custom_textfield.dart';
 import 'package:sample_task/viewmodels/education/education_viewmodel.dart';
 
-
-
-class UserInfoPage extends GetView<EducationViewModel>
-{
-
-  UserModel? mUser;
-
-  UserInfoPage({this.mUser});
-
+class UserInfoPage extends StatelessWidget {
   TextEditingController yearOfPassing = TextEditingController();
   TextEditingController university = TextEditingController();
   TextEditingController grade = TextEditingController();
@@ -25,17 +17,10 @@ class UserInfoPage extends GetView<EducationViewModel>
   TextEditingController designation = TextEditingController();
   TextEditingController domain = TextEditingController();
 
-  List<String> educationList=[ 'PostGraduate', 'Graduate', 'HSC', 'Diploma', 'SSC'];
-
-
-
+  final controller = Get.put(EducationViewModel());
 
   @override
   Widget build(BuildContext context) {
-    String educationSelection=educationList[0];
-    Get.put(EducationViewModel());
-    controller.updateCurrentUser(mUser!);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -63,7 +48,7 @@ class UserInfoPage extends GetView<EducationViewModel>
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-               const SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Text(
@@ -74,25 +59,24 @@ class UserInfoPage extends GetView<EducationViewModel>
                   ),
                 ),
                 DropdownButtonFormField<String>(
-                    decoration:const InputDecoration(
-                      enabledBorder:  OutlineInputBorder(
+                    decoration: const InputDecoration(
+                      enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
-                      focusedBorder:  OutlineInputBorder(
+                      focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.deepPurpleAccent, width: 1.0),
                       ),
                       border: OutlineInputBorder(),
-                      contentPadding:  EdgeInsets.only(
+                      contentPadding: EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                     ),
-                    value: educationSelection,
+                    value: controller.educationList[0],
                     onChanged: (newValue) {
-                      print(newValue);
-                      educationSelection!=newValue;
+                      controller.selectedEducation != newValue;
                     },
-                    items: educationList.map((classType) {
+                    items: controller.educationList.map((classType) {
                       return DropdownMenuItem(
                           value: classType.toString(),
                           child: Text(classType.toString()));
@@ -116,7 +100,6 @@ class UserInfoPage extends GetView<EducationViewModel>
                     obscureText: false,
                     controller: university,
                     regExp: "[a-zA-Z ]"),
-
                 CustomTextField(
                     label: "Grade*",
                     hint: "Enter your grade of percentage",
@@ -125,7 +108,6 @@ class UserInfoPage extends GetView<EducationViewModel>
                     obscureText: false,
                     controller: grade,
                     regExp: "[a-zA-Z0-9 ]"),
-
                 Text(
                   'Professional Info',
                   style: GoogleFonts.poppins(
@@ -144,7 +126,6 @@ class UserInfoPage extends GetView<EducationViewModel>
                     obscureText: false,
                     controller: experience,
                     regExp: "[0-9]"),
-
                 CustomTextField(
                     label: "Designation*",
                     hint: "Enter Designation",
@@ -153,7 +134,6 @@ class UserInfoPage extends GetView<EducationViewModel>
                     obscureText: false,
                     controller: designation,
                     regExp: "[a-zA-Z ]"),
-
                 CustomTextField(
                     label: "Domain*",
                     hint: "Enter your Domain",
@@ -162,7 +142,6 @@ class UserInfoPage extends GetView<EducationViewModel>
                     obscureText: false,
                     controller: domain,
                     regExp: "[a-zA-Z0-9 ]"),
-
                 Row(
                   children: [
                     Expanded(
@@ -185,7 +164,7 @@ class UserInfoPage extends GetView<EducationViewModel>
                         textColor: Colors.white,
                         radius: 10,
                         primaryColor: Colors.deepPurpleAccent,
-                        onPress: () => _verifyUserInfo(educationSelection),
+                        onPress: () => _verifyUserInfo(),
                       ),
                     ),
                   ],
@@ -198,8 +177,7 @@ class UserInfoPage extends GetView<EducationViewModel>
     );
   }
 
-  _verifyUserInfo(String education) {
-
+  _verifyUserInfo() {
     if (yearOfPassing.text.trim().isEmpty) {
       Utils().showSnackbar("Year of Passing must be entered");
     } else if (university.text.trim().isEmpty) {
@@ -214,7 +192,6 @@ class UserInfoPage extends GetView<EducationViewModel>
       Utils().showSnackbar("Designation must be entered");
     } else {
       controller.saveUserEducationInfo(
-          education,
           yearOfPassing.text.trim().toString(),
           university.text.trim().toString(),
           grade.text.trim().toString(),

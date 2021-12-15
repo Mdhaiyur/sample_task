@@ -4,11 +4,11 @@ import 'package:sample_task/model/user_model.dart';
 import 'package:sample_task/repository/user_repository_imp.dart';
 import 'package:sample_task/view/home/home_page.dart';
 
-class AddressViewModel extends GetxController
-{
-
+class AddressViewModel extends GetxController {
   DatabaseProvider dbProvider = DatabaseProvider.get;
-  var currentUser = UserModel();
+  var currentUser;
+
+  var selectedState;
 
   var cityList = [
     'Maharashtra',
@@ -19,9 +19,10 @@ class AddressViewModel extends GetxController
     'Others'
   ];
 
-
-  updateCurrentUser(UserModel mUser) {
-    currentUser = mUser;
+  @override
+  void onInit() {
+    super.onInit();
+    currentUser = Get.find<UserModel>();
   }
 
   saveUserAddress(String address, String landmark, String zipcode, String city,
@@ -30,7 +31,7 @@ class AddressViewModel extends GetxController
     currentUser.locality = landmark;
     currentUser.zipcode = zipcode;
     currentUser.city = city;
-    currentUser.state = state;
+    currentUser.state = selectedState;
 
     UserRepositoryImp(dbProvider).insert(currentUser);
 

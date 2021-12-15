@@ -1,8 +1,8 @@
 # sample_task
-Sample task is a app to cupture users personal and profesional details.
+Sample task is a app to capture users personal and professional details.
 
 ##### Technical details
-App follow MVP Code Structure.
+App follow MVVM Code Structure.
 
 ###### Packages used in app
 - [sqflite](https://pub.dev/packages/sqflite)
@@ -14,11 +14,9 @@ App follow MVP Code Structure.
 
 
 ![alt text](https://gcdn.pbrd.co/images/P50foCqo0wwb.png?o=1)
-
 ![alt text](https://gcdn.pbrd.co/images/6E6KcteAZrFJ.png?o=1)
 
 ![alt text](https://gcdn.pbrd.co/images/ecxbYRn9lPjH.png?o=1)
-
 ![alt text](https://gcdn.pbrd.co/images/9IiToN53X2IR.png?o=1)
 
 ![alt text](https://gcdn.pbrd.co/images/uIKLF8rbKUlJ.png?o=1)

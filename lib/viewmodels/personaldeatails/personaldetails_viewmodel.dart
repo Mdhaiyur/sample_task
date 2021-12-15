@@ -9,7 +9,7 @@ class PersonalDetailsViewModel extends GetxController {
   late String selectGender = '';
   Uint8List? profilePhoto;
   var currentUser = UserModel();
-  bool passwordVisible=false;
+  bool passwordVisible = false;
 
   updateGender(String gender) {
     selectGender = gender;
@@ -36,12 +36,7 @@ class PersonalDetailsViewModel extends GetxController {
     currentUser.password = password;
     currentUser.profilePhoto = profilePhoto;
 
-    Get.to(UserInfoPage(mUser: currentUser,));
+    Get.put<UserModel>(currentUser);
+    Get.to(UserInfoPage());
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
 }
