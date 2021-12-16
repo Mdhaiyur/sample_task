@@ -9,7 +9,7 @@ import 'package:sample_task/view/widget/custom_button.dart';
 import 'package:sample_task/view/widget/custom_textfield.dart';
 import 'package:sample_task/viewmodels/education/education_viewmodel.dart';
 
-class UserInfoPage extends StatelessWidget {
+class UserInfoPage extends GetView<EducationViewModel> {
   TextEditingController yearOfPassing = TextEditingController();
   TextEditingController university = TextEditingController();
   TextEditingController grade = TextEditingController();
@@ -17,7 +17,6 @@ class UserInfoPage extends StatelessWidget {
   TextEditingController designation = TextEditingController();
   TextEditingController domain = TextEditingController();
 
-  final controller = Get.put(EducationViewModel());
 
   @override
   Widget build(BuildContext context) {

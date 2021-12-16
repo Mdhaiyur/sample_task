@@ -9,8 +9,7 @@ import 'package:sample_task/viewmodels/home/home_viewmodel.dart';
 
 import 'user_details_page.dart';
 
-class HomePage extends StatelessWidget {
-  final HomeViewModel userController = Get.put(HomeViewModel());
+class HomePage extends GetView<HomeViewModel> {
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class HomePage extends StatelessWidget {
         children: [
           Expanded(
             child: GetX<HomeViewModel>(
-                init: userController,
+                init: controller,
                 builder: (controller) {
                   return ListView.builder(
                     scrollDirection: Axis.vertical,

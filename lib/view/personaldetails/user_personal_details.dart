@@ -8,7 +8,7 @@ import 'package:sample_task/view/widget/custom_button.dart';
 import 'package:sample_task/view/widget/custom_textfield.dart';
 import 'package:sample_task/viewmodels/personaldeatails/personaldetails_viewmodel.dart';
 
-class UserRegisterPage extends StatelessWidget {
+class UserRegisterPage extends GetView<PersonalDetailsViewModel> {
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
@@ -17,8 +17,6 @@ class UserRegisterPage extends StatelessWidget {
   TextEditingController confirmPassword = TextEditingController();
   final ImagePicker _picker = ImagePicker();
 
-  final PersonalDetailsViewModel userController =
-      Get.put(PersonalDetailsViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +49,14 @@ class UserRegisterPage extends StatelessWidget {
                       fit: StackFit.expand,
                       children: [
                         GetBuilder<PersonalDetailsViewModel>(
-                          init: userController,
+                          init: controller,
                           builder: (value) => CircleAvatar(
                               radius: 50,
-                              child: userController.profilePhoto != null
+                              child: controller.profilePhoto != null
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(60.0),
                                       child: Image.memory(
-                                        userController.profilePhoto!,
+                                        controller.profilePhoto!,
                                         width: 115,
                                         height: 115,
                                         fit: BoxFit.fill,
@@ -144,27 +142,27 @@ class UserRegisterPage extends StatelessWidget {
                   height: 15,
                 ),
                 GetBuilder<PersonalDetailsViewModel>(
-                    init: userController,
+                    init: controller,
                     builder: (value) => CustomTextField(
                           label: "Password*",
                           hint: "Password",
                           inputType: TextInputType.visiblePassword,
                           inputAction: TextInputAction.next,
-                          obscureText: !userController.passwordVisible,
+                          obscureText: !controller.passwordVisible,
                           regExp: '',
                           controller: password,
                           prefixIcon: const Icon(Icons.email,
                               color: Colors.deepPurpleAccent),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              userController.passwordVisible
+                              controller.passwordVisible
                                   ? Icons.visibility
                                   : Icons.visibility_off,
                               color: Colors.deepPurpleAccent,
                             ),
                             onPressed: () {
-                              userController.updatePasswordVisibility(
-                                  !userController.passwordVisible);
+                              controller.updatePasswordVisibility(
+                                  !controller.passwordVisible);
                             },
                           ),
                         )),
@@ -199,13 +197,13 @@ class UserRegisterPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         GetBuilder<PersonalDetailsViewModel>(
-          init: userController,
+          init: controller,
           builder: (value) => Radio(
             activeColor: Colors.deepPurpleAccent,
-            value: userController.gender[btnValue].toString(),
-            groupValue: userController.selectGender,
+            value: controller.gender[btnValue].toString(),
+            groupValue: controller.selectGender,
             onChanged: (value) {
-              userController.updateGender(value.toString());
+              controller.updateGender(value.toString());
             },
           ),
         ),
@@ -231,7 +229,7 @@ class UserRegisterPage extends StatelessWidget {
       Utils().showSnackbar("Email must be entered.");
     } else if (!Utils().isEmailValid(email.text.trim())) {
       Utils().showSnackbar("Email must be valid.");
-    } else if (userController.selectGender == '') {
+    } else if (controller.selectGender == '') {
       Utils().showSnackbar("Gender must be selected.");
     } else if (password.text.trim().isEmpty) {
       Utils().showSnackbar("Password must be entered.");
@@ -242,7 +240,7 @@ class UserRegisterPage extends StatelessWidget {
     } else if (password.text.trim() != confirmPassword.text.trim()) {
       Utils().showSnackbar("Password and Confirm Password must be same.");
     } else {
-      userController.saveUserRegisterDetails(
+      controller.saveUserRegisterDetails(
           firstName.text.toString(),
           lastName.text.toString(),
           phoneNumber.text.toString(),
@@ -274,7 +272,7 @@ class UserRegisterPage extends StatelessWidget {
               final pickedFile =
                   await _picker.pickImage(source: ImageSource.camera);
               pickedFile!.readAsBytes().then((value) {
-                userController.updateUserProfile(value);
+                controller.updateUserProfile(value);
               });
               Get.back();
             },
@@ -288,7 +286,7 @@ class UserRegisterPage extends StatelessWidget {
               final pickedFile =
                   await _picker.pickImage(source: ImageSource.gallery);
               pickedFile!.readAsBytes().then((value) {
-                userController.updateUserProfile(value);
+                controller.updateUserProfile(value);
               });
               Get.back();
             },

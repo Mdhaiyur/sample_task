@@ -8,13 +8,11 @@ import 'package:sample_task/view/widget/custom_button.dart';
 import 'package:sample_task/view/widget/custom_textfield.dart';
 import 'package:sample_task/viewmodels/address/address_viewmodel.dart';
 
-class UserAddressPage extends StatelessWidget {
+class UserAddressPage extends GetView<AddressViewModel> {
   TextEditingController address = TextEditingController();
   TextEditingController landmark = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController zipcode = TextEditingController();
-
-  final controller = Get.put(AddressViewModel());
 
   @override
   Widget build(BuildContext context) {
