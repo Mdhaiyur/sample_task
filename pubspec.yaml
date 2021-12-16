@@ -37,12 +37,14 @@ dependencies:
   get: ^4.5.1
   google_fonts: ^2.1.0
   image_picker: ^0.8.4+4
-  sqflite: ^2.0.0+4
+  floor: ^1.2.0
 
 
 
 
 dev_dependencies:
+  floor_generator: ^1.2.0
+  build_runner: ^2.1.2
   flutter_test:
     sdk: flutter
 

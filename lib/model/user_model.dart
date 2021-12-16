@@ -1,6 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:floor/floor.dart';
+
+@entity
 class UserModel {
+  @PrimaryKey(autoGenerate: true)
+  int? id;
   String? firstName;
   String? lastName;
   String? email;
@@ -22,7 +27,8 @@ class UserModel {
   String? state;
 
   UserModel(
-      {this.firstName,
+      {this.id,
+      this.firstName,
       this.lastName,
       this.email,
       this.mobileNumber,

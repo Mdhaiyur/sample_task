@@ -35,7 +35,6 @@ class EducationViewModel extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     currentUser=Get.find<UserModel>();
   }

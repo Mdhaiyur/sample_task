@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
+import 'package:sample_task/data/local/database_helper.dart';
 import 'package:sample_task/data/local/database_provider.dart';
 import 'package:sample_task/model/user_model.dart';
-import 'package:sample_task/repository/user_repository_imp.dart';
 import 'package:sample_task/view/home/home_page.dart';
 
 class AddressViewModel extends GetxController {
-  DatabaseProvider dbProvider = DatabaseProvider.get;
+  AppDatabase? database;
   var currentUser;
 
   var selectedState;
@@ -20,8 +20,9 @@ class AddressViewModel extends GetxController {
   ];
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
+    database = await DatabaseHelper.instance.database;
     currentUser = Get.find<UserModel>();
   }
 
@@ -33,8 +34,8 @@ class AddressViewModel extends GetxController {
     currentUser.city = city;
     currentUser.state = selectedState;
 
-    UserRepositoryImp(dbProvider).insert(currentUser);
-
-    Get.offAll(() => HomePage());
+    database!.userDao
+        .insertUser(currentUser)
+        .then((value) => Get.offAll(() => HomePage()));
   }
 }

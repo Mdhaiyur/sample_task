@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:sample_task/binding/home_binding.dart';
 import 'package:sample_task/view/home/home_page.dart';
 
-void main() {
+Future<void> main() async {
   runApp(const MyApp());
 }
 
