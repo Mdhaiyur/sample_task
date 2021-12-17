@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:floor/floor.dart';
 
 @entity
