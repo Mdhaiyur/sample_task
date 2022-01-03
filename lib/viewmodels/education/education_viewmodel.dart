@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sample_task/model/user_model.dart';
 import 'package:sample_task/view/address/user_address_view.dart';
 
-class EducationViewModel extends GetxController {
+class EducationViewModel extends ChangeNotifier {
   var currentUser;
 
   String selectedEducation='';
@@ -33,9 +34,7 @@ class EducationViewModel extends GetxController {
     Get.to(UserAddressPage());
   }
 
-  @override
-  void onInit() {
-    super.onInit();
+  EducationViewModel(){
     currentUser=Get.find<UserModel>();
   }
 }

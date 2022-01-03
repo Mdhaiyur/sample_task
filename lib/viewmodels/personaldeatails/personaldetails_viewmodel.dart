@@ -1,10 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:sample_task/model/user_model.dart';
 import 'package:sample_task/view/education/user_education_view.dart';
 
-class PersonalDetailsViewModel extends GetxController {
+class PersonalDetailsViewModel extends ChangeNotifier {
   List gender = ["Male", "Female"];
   late String selectGender = '';
   Uint8List? profilePhoto;
@@ -13,17 +14,17 @@ class PersonalDetailsViewModel extends GetxController {
 
   updateGender(String gender) {
     selectGender = gender;
-    update();
+    notifyListeners();
   }
 
   updatePasswordVisibility(bool visibility) {
     passwordVisible = visibility;
-    update();
+    notifyListeners();
   }
 
   updateUserProfile(Uint8List profilePhoto) {
     this.profilePhoto = profilePhoto;
-    update();
+    notifyListeners();
   }
 
   saveUserRegisterDetails(String firstName, String lastName, String phoneNumber,

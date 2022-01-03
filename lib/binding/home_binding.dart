@@ -8,9 +8,9 @@ class HomeBinding extends Bindings
 {
   @override
   void dependencies() {
-    Get.lazyPut(() => HomeViewModel());
-    Get.lazyPut(() => PersonalDetailsViewModel(),fenix: true);
-    Get.lazyPut(() => EducationViewModel(),fenix: true);
-    Get.lazyPut(() => AddressViewModel(),fenix: true);
+  //  Get.lazyPut(() => HomeViewModel());
+  //  Get.lazyPut(() => PersonalDetailsViewModel(),fenix: true);
+  //  Get.lazyPut(() => EducationViewModel(),fenix: true);
+    // Get.lazyPut(() => AddressViewModel(),fenix: true);
   }
 }

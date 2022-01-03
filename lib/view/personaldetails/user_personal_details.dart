@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sample_task/utils/utils.dart';
 import 'package:sample_task/view/widget/custom_button.dart';
 import 'package:sample_task/view/widget/custom_textfield.dart';
 import 'package:sample_task/viewmodels/personaldeatails/personaldetails_viewmodel.dart';
 
-class UserRegisterPage extends GetView<PersonalDetailsViewModel> {
+class UserRegisterPage extends StatelessWidget {
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
@@ -17,6 +17,127 @@ class UserRegisterPage extends GetView<PersonalDetailsViewModel> {
   TextEditingController confirmPassword = TextEditingController();
   final ImagePicker _picker = ImagePicker();
 
+  Row genderRadioButtons(int btnValue, String title) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Consumer<PersonalDetailsViewModel>(builder: (context, provider, child) {
+          return Radio(
+            activeColor: Colors.deepPurpleAccent,
+            value: provider.gender[btnValue].toString(),
+            groupValue: provider.selectGender,
+            onChanged: (value) {
+              provider.updateGender(value.toString());
+            },
+          );
+        }),
+        Text(title)
+      ],
+    );
+  }
+
+  _verifyUserRegister(BuildContext context) {
+    if (firstName.text.trim().isEmpty) {
+      Utils().showSnackbar("First Name must be entered.");
+    } else if (firstName.text.trim().length < 4) {
+      Utils().showSnackbar("First Name must Contain Atleast 4 Characters.");
+    } else if (lastName.text.trim().isEmpty) {
+      Utils().showSnackbar("Last Name must be entered.");
+    } else if (lastName.text.trim().length < 4) {
+      Utils().showSnackbar("Last Name must Contain Atleast 4 Characters.");
+    } else if (phoneNumber.text.trim().isEmpty) {
+      Utils().showSnackbar("Phone Number must be entered.");
+    } else if (phoneNumber.text.trim().length != 10) {
+      Utils().showSnackbar("Phone Number must be valid number.");
+    } else if (email.text.trim().isEmpty) {
+      Utils().showSnackbar("Email must be entered.");
+    } else if (!Utils().isEmailValid(email.text.trim())) {
+      Utils().showSnackbar("Email must be valid.");
+    } else if (Provider.of<PersonalDetailsViewModel >(context,listen: false).selectGender == '') {
+      Utils().showSnackbar("Gender must be selected.");
+    } else if (password.text.trim().isEmpty) {
+      Utils().showSnackbar("Password must be entered.");
+    } else if (!Utils().validatePassword(password.text.trim())) {
+      Utils().showSnackbar("Password must be valid.");
+    } else if (confirmPassword.text.trim().isEmpty) {
+      Utils().showSnackbar("Confirm Password must be entered.");
+    } else if (password.text.trim() != confirmPassword.text.trim()) {
+      Utils().showSnackbar("Password and Confirm Password must be same.");
+    } else {
+      Provider.of<PersonalDetailsViewModel>(context,listen: false).saveUserRegisterDetails(
+          firstName.text.toString(),
+          lastName.text.toString(),
+          phoneNumber.text.toString(),
+          email.text.toString(),
+          password.text.toString());
+    }
+  }
+
+  _showAlertDialog(BuildContext context) {
+    Widget okButton = TextButton(
+      child: Text(
+        "Cancel",
+        style: GoogleFonts.poppins(fontSize: 14),
+      ),
+      onPressed: () {
+        Get.back();
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text(
+        "Select option",
+        style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.bold),
+      ),
+      content: Wrap(
+        direction: Axis.vertical,
+        children: [
+          Consumer<PersonalDetailsViewModel>(builder: (context,provider,child){
+            return InkWell(
+              onTap: () async {
+                final pickedFile =
+                await _picker.pickImage(source: ImageSource.camera);
+                pickedFile!.readAsBytes().then((value) {
+                  provider.updateUserProfile(value);
+                });
+                Get.back();
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text("Camera"),
+              ),
+            );
+          }),
+          Consumer<PersonalDetailsViewModel>(builder: (context,provider,child){
+            return  InkWell(
+              onTap: () async {
+                final pickedFile =
+                await _picker.pickImage(source: ImageSource.gallery);
+                pickedFile!.readAsBytes().then((value) {
+                  provider.updateUserProfile(value);
+                });
+                Get.back();
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text("Gallery"),
+              ),
+            );
+          }),
+
+
+        ],
+      ),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,21 +169,22 @@ class UserRegisterPage extends GetView<PersonalDetailsViewModel> {
                       clipBehavior: Clip.none,
                       fit: StackFit.expand,
                       children: [
-                        GetBuilder<PersonalDetailsViewModel>(
-                          init: controller,
-                          builder: (value) => CircleAvatar(
-                              radius: 50,
-                              child: controller.profilePhoto != null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(60.0),
+                        Consumer<PersonalDetailsViewModel>(
+                            builder: (context, provider, child) {
+                              return CircleAvatar(
+                                  radius: 50,
+                                  child: provider.profilePhoto != null
+                                      ? ClipRRect(
+                                      borderRadius:
+                                      BorderRadius.circular(60.0),
                                       child: Image.memory(
-                                        controller.profilePhoto!,
+                                        provider.profilePhoto!,
                                         width: 115,
                                         height: 115,
                                         fit: BoxFit.fill,
                                       ))
-                                  : Container()),
-                        ),
+                                      : Container());
+                            }),
                         Positioned(
                             bottom: 25,
                             right: -50,
@@ -141,31 +263,32 @@ class UserRegisterPage extends GetView<PersonalDetailsViewModel> {
                 const SizedBox(
                   height: 15,
                 ),
-                GetBuilder<PersonalDetailsViewModel>(
-                    init: controller,
-                    builder: (value) => CustomTextField(
-                          label: "Password*",
-                          hint: "Password",
-                          inputType: TextInputType.visiblePassword,
-                          inputAction: TextInputAction.next,
-                          obscureText: !controller.passwordVisible,
-                          regExp: '',
-                          controller: password,
-                          prefixIcon: const Icon(Icons.email,
-                              color: Colors.deepPurpleAccent),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              controller.passwordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.deepPurpleAccent,
-                            ),
-                            onPressed: () {
-                              controller.updatePasswordVisibility(
-                                  !controller.passwordVisible);
-                            },
+                Consumer<PersonalDetailsViewModel>(
+                    builder: (context, provider, child) {
+                      return CustomTextField(
+                        label: "Password*",
+                        hint: "Password",
+                        inputType: TextInputType.visiblePassword,
+                        inputAction: TextInputAction.next,
+                        obscureText: !provider.passwordVisible,
+                        regExp: '',
+                        controller: password,
+                        prefixIcon: const Icon(Icons.email,
+                            color: Colors.deepPurpleAccent),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            provider.passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.deepPurpleAccent,
                           ),
-                        )),
+                          onPressed: () {
+                            provider.updatePasswordVisibility(
+                                !provider.passwordVisible);
+                          },
+                        ),
+                      );
+                    }),
                 CustomTextField(
                     label: "Confirm Password*",
                     hint: "Password",
@@ -182,130 +305,13 @@ class UserRegisterPage extends GetView<PersonalDetailsViewModel> {
                   textColor: Colors.white,
                   radius: 10,
                   primaryColor: Colors.deepPurpleAccent,
-                  onPress: () => _verifyUserRegister(),
+                  onPress: () => _verifyUserRegister(context),
                 ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Row genderRadioButtons(int btnValue, String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        GetBuilder<PersonalDetailsViewModel>(
-          init: controller,
-          builder: (value) => Radio(
-            activeColor: Colors.deepPurpleAccent,
-            value: controller.gender[btnValue].toString(),
-            groupValue: controller.selectGender,
-            onChanged: (value) {
-              controller.updateGender(value.toString());
-            },
-          ),
-        ),
-        Text(title)
-      ],
-    );
-  }
-
-  _verifyUserRegister() {
-    if (firstName.text.trim().isEmpty) {
-      Utils().showSnackbar("First Name must be entered.");
-    } else if (firstName.text.trim().length < 4) {
-      Utils().showSnackbar("First Name must Contain Atleast 4 Characters.");
-    } else if (lastName.text.trim().isEmpty) {
-      Utils().showSnackbar("Last Name must be entered.");
-    } else if (lastName.text.trim().length < 4) {
-      Utils().showSnackbar("Last Name must Contain Atleast 4 Characters.");
-    } else if (phoneNumber.text.trim().isEmpty) {
-      Utils().showSnackbar("Phone Number must be entered.");
-    } else if (phoneNumber.text.trim().length != 10) {
-      Utils().showSnackbar("Phone Number must be valid number.");
-    } else if (email.text.trim().isEmpty) {
-      Utils().showSnackbar("Email must be entered.");
-    } else if (!Utils().isEmailValid(email.text.trim())) {
-      Utils().showSnackbar("Email must be valid.");
-    } else if (controller.selectGender == '') {
-      Utils().showSnackbar("Gender must be selected.");
-    } else if (password.text.trim().isEmpty) {
-      Utils().showSnackbar("Password must be entered.");
-    } else if (!Utils().validatePassword(password.text.trim())) {
-      Utils().showSnackbar("Password must be valid.");
-    } else if (confirmPassword.text.trim().isEmpty) {
-      Utils().showSnackbar("Confirm Password must be entered.");
-    } else if (password.text.trim() != confirmPassword.text.trim()) {
-      Utils().showSnackbar("Password and Confirm Password must be same.");
-    } else {
-      controller.saveUserRegisterDetails(
-          firstName.text.toString(),
-          lastName.text.toString(),
-          phoneNumber.text.toString(),
-          email.text.toString(),
-          password.text.toString());
-    }
-  }
-
-  _showAlertDialog(BuildContext context) {
-    Widget okButton = TextButton(
-      child: Text(
-        "Cancel",
-        style: GoogleFonts.poppins(fontSize: 14),
-      ),
-      onPressed: () {
-        Get.back();
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text(
-        "Select option",
-        style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.bold),
-      ),
-      content: Wrap(
-        direction: Axis.vertical,
-        children: [
-          InkWell(
-            onTap: () async {
-              final pickedFile =
-                  await _picker.pickImage(source: ImageSource.camera);
-              pickedFile!.readAsBytes().then((value) {
-                controller.updateUserProfile(value);
-              });
-              Get.back();
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text("Camera"),
-            ),
-          ),
-          InkWell(
-            onTap: () async {
-              final pickedFile =
-                  await _picker.pickImage(source: ImageSource.gallery);
-              pickedFile!.readAsBytes().then((value) {
-                controller.updateUserProfile(value);
-              });
-              Get.back();
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text("Gallery"),
-            ),
-          )
-        ],
-      ),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
     );
   }
 }

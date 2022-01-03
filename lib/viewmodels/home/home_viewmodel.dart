@@ -1,14 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:sample_task/data/local/database_helper.dart';
 import 'package:sample_task/data/local/database_provider.dart';
 
-class HomeViewModel extends GetxController {
+class HomeViewModel extends ChangeNotifier {
   var mlistUser = [].obs;
   AppDatabase? database;
 
+  HomeViewModel(){
+    initialize();
+  }
+
   @override
-  Future<void> onInit() async {
-    super.onInit();
+  Future<void> initialize() async {
     database = await DatabaseHelper.instance.database;
     getUserData();
   }
@@ -17,6 +21,7 @@ class HomeViewModel extends GetxController {
     database!.userDao.getAllUsers().then((value) {
       mlistUser.clear();
       mlistUser.addAll(value);
+      notifyListeners();
     });
   }
 }

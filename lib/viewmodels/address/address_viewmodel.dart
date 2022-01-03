@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sample_task/data/local/database_helper.dart';
 import 'package:sample_task/data/local/database_provider.dart';
 import 'package:sample_task/model/user_model.dart';
 import 'package:sample_task/view/home/home_page.dart';
 
-class AddressViewModel extends GetxController {
+class AddressViewModel extends ChangeNotifier {
   AppDatabase? database;
   var currentUser;
 
@@ -19,9 +20,11 @@ class AddressViewModel extends GetxController {
     'Others'
   ];
 
-  @override
-  Future<void> onInit() async {
-    super.onInit();
+  AddressViewModel(){
+    initData();
+  }
+
+  initData() async {
     database = await DatabaseHelper.instance.database;
     currentUser = Get.find<UserModel>();
   }

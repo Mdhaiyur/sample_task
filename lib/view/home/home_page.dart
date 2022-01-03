@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:sample_task/model/user_model.dart';
 import 'package:sample_task/view/personaldetails/user_personal_details.dart';
 import 'package:sample_task/view/widget/custom_button.dart';
@@ -9,8 +10,7 @@ import 'package:sample_task/viewmodels/home/home_viewmodel.dart';
 
 import 'user_details_page.dart';
 
-class HomePage extends GetView<HomeViewModel> {
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,30 +26,27 @@ class HomePage extends GetView<HomeViewModel> {
       ),
       body: SafeArea(
           child: Column(
-        children: [
-          Expanded(
-            child: GetX<HomeViewModel>(
-                init: controller,
-                builder: (controller) {
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: controller.mlistUser.length,
-                    itemBuilder: (context, index) {
-                      return userCell(controller.mlistUser[index]);
-                    },
-                  );
-                }),
-          ),
-          CustomButton(
-            text: 'Register',
-            borderColor: Colors.deepPurpleAccent,
-            textColor: Colors.white,
-            primaryColor: Colors.deepPurpleAccent,
-            onPress: () => Get.to(UserRegisterPage()),
-          ),
-        ],
-      )),
+            children: [
+              Expanded(child:
+              Consumer<HomeViewModel>(builder: (context, provider, child) {
+                return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: provider.mlistUser.length,
+                  itemBuilder: (context, index) {
+                    return userCell(provider.mlistUser[index]);
+                  },
+                );
+              })),
+              CustomButton(
+                text: 'Register',
+                borderColor: Colors.deepPurpleAccent,
+                textColor: Colors.white,
+                primaryColor: Colors.deepPurpleAccent,
+                onPress: () => Get.to(UserRegisterPage()),
+              ),
+            ],
+          )),
     );
   }
 
@@ -70,8 +67,14 @@ class HomePage extends GetView<HomeViewModel> {
               child: user.profilePhoto == null
                   ? Image.asset('assets/images/user_placeholder.png')
                   : ClipRRect(
-                      borderRadius: BorderRadius.circular(60.0),
-                      child: Image.memory(user.profilePhoto!)),
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      borderRadius: BorderRadius.circular(30.0),
+                      child: Image.memory(
+                        user.profilePhoto!,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      )),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -85,7 +88,7 @@ class HomePage extends GetView<HomeViewModel> {
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    user.city! + "," + user.state!,
+                    user.city!,
                     style: GoogleFonts.poppins(fontSize: 14),
                   ),
                 ],

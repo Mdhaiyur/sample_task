@@ -1,14 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sample_task/utils/utils.dart';
 import 'package:sample_task/view/widget/custom_button.dart';
 import 'package:sample_task/view/widget/custom_textfield.dart';
 import 'package:sample_task/viewmodels/address/address_viewmodel.dart';
 
-class UserAddressPage extends GetView<AddressViewModel> {
+class UserAddressPage extends StatelessWidget {
   TextEditingController address = TextEditingController();
   TextEditingController landmark = TextEditingController();
   TextEditingController city = TextEditingController();
@@ -89,11 +87,11 @@ class UserAddressPage extends GetView<AddressViewModel> {
                       contentPadding: EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                     ),
-                    value: controller.cityList[0],
+                    value: Provider.of<AddressViewModel>(context,listen: false).cityList[0],
                     onChanged: (newValue) {
-                      controller.selectedState=newValue;
+                      Provider.of<AddressViewModel>(context,listen: false).selectedState=newValue;
                     },
-                    items: controller.cityList.map((classType) {
+                    items: Provider.of<AddressViewModel>(context,listen: false).cityList.map((classType) {
                       return DropdownMenuItem(
                           value: classType.toString(),
                           child: Text(classType.toString()));
@@ -107,7 +105,7 @@ class UserAddressPage extends GetView<AddressViewModel> {
                   textColor: Colors.white,
                   primaryColor: Colors.deepPurpleAccent,
                   radius: 10,
-                  onPress: () => _verifyUserAddress(),
+                  onPress: () => _verifyUserAddress(context),
                 ),
               ],
             ),
@@ -117,7 +115,7 @@ class UserAddressPage extends GetView<AddressViewModel> {
     );
   }
 
-  _verifyUserAddress() {
+  _verifyUserAddress(BuildContext context) {
     if (address.text.trim().toString().isEmpty) {
       Utils().showSnackbar("Address must be entered");
     } else if (address.text.trim().toString().length < 4) {
@@ -131,7 +129,7 @@ class UserAddressPage extends GetView<AddressViewModel> {
     } else if (zipcode.text.trim().toString().length != 6) {
       Utils().showSnackbar("Zipcode must Contain 6 Characters.");
     } else {
-      controller.saveUserAddress(
+      Provider.of<AddressViewModel>(context,listen: false).saveUserAddress(
           address.text.trim().toString(),
           landmark.text.trim().toString(),
           zipcode.text.trim().toString(),

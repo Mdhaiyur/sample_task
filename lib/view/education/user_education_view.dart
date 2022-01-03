@@ -1,15 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sample_task/model/user_model.dart';
+import 'package:provider/provider.dart';
 import 'package:sample_task/utils/utils.dart';
 import 'package:sample_task/view/widget/custom_button.dart';
 import 'package:sample_task/view/widget/custom_textfield.dart';
 import 'package:sample_task/viewmodels/education/education_viewmodel.dart';
 
-class UserInfoPage extends GetView<EducationViewModel> {
+class UserInfoPage extends StatelessWidget {
   TextEditingController yearOfPassing = TextEditingController();
   TextEditingController university = TextEditingController();
   TextEditingController grade = TextEditingController();
@@ -71,11 +69,11 @@ class UserInfoPage extends GetView<EducationViewModel> {
                       contentPadding: EdgeInsets.only(
                           left: 15, bottom: 11, top: 11, right: 15),
                     ),
-                    value: controller.educationList[0],
+                    value: Provider.of<EducationViewModel>(context,listen: false).educationList[0],
                     onChanged: (newValue) {
-                      controller.selectedEducation != newValue;
+                      Provider.of<EducationViewModel>(context,listen: false).selectedEducation != newValue;
                     },
-                    items: controller.educationList.map((classType) {
+                    items: Provider.of<EducationViewModel>(context,listen: false).educationList.map((classType) {
                       return DropdownMenuItem(
                           value: classType.toString(),
                           child: Text(classType.toString()));
@@ -163,7 +161,7 @@ class UserInfoPage extends GetView<EducationViewModel> {
                         textColor: Colors.white,
                         radius: 10,
                         primaryColor: Colors.deepPurpleAccent,
-                        onPress: () => _verifyUserInfo(),
+                        onPress: () => _verifyUserInfo(context),
                       ),
                     ),
                   ],
@@ -176,7 +174,7 @@ class UserInfoPage extends GetView<EducationViewModel> {
     );
   }
 
-  _verifyUserInfo() {
+  _verifyUserInfo(BuildContext context) {
     if (yearOfPassing.text.trim().isEmpty) {
       Utils().showSnackbar("Year of Passing must be entered");
     } else if (university.text.trim().isEmpty) {
@@ -190,7 +188,7 @@ class UserInfoPage extends GetView<EducationViewModel> {
     } else if (domain.text.trim().isEmpty) {
       Utils().showSnackbar("Designation must be entered");
     } else {
-      controller.saveUserEducationInfo(
+      Provider.of<EducationViewModel>(context,listen: false).saveUserEducationInfo(
           yearOfPassing.text.trim().toString(),
           university.text.trim().toString(),
           grade.text.trim().toString(),
